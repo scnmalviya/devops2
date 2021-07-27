@@ -7,14 +7,15 @@ EXPOSE 80
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /src
 #COPY *.csproj ./
-COPY ["DotNetCoreDockeer.csproj", ""]
+COPY ["DotNetCoreDockeer/DotNetCoreDockeer.csproj", "DotNetCoreDockeer/"]
 #USER root
 #RUN chmod 755 /src
 
-
-RUN dotnet restore "./DotNetCoreDockeer.csproj"
 COPY . .
-WORKDIR "/src/"
+
+RUN dotnet restore "DotNetCoreDockeer/DotNetCoreDockeer.csproj"
+#COPY . .
+WORKDIR "/src/DotNetCoreDockeer"
 RUN dotnet build "DotNetCoreDockeer.csproj" -c Release -o /app/build
 
 FROM build AS publish
